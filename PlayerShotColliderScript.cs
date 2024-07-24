@@ -15,8 +15,9 @@ public class PlayerShotColliderScript : MonoBehaviour
         {
             print("PlayerShotColliderScript OnTriggerEnter");
             print("transform.parent"+ other);
-            
-            playerShotScript.ObjTriggerEnter(other.transform.parent.gameObject);
+            if(other != null) { 
+                playerShotScript.ObjTriggerEnter(other.transform.parent.gameObject);
+            }
         }
         
 

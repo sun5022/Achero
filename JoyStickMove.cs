@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using Game;
 
 public class JoyStickMove : MonoBehaviour
 {
@@ -16,9 +16,11 @@ public class JoyStickMove : MonoBehaviour
     float stickRadius;
     public Vector3 joyDir;
     Vector3 joystickPos;
-
+    public TouchState touchState;
     void Start()
     {
+        touchState = TouchState.IDLE;
+        
         instance = this;
         backgroundRadius = joystickBack.GetComponent<RectTransform>().sizeDelta.x/2 * canvas.scaleFactor;
         stickRadius = stick.GetComponent<RectTransform>().sizeDelta.x / 2 * canvas.scaleFactor;
@@ -34,6 +36,7 @@ public class JoyStickMove : MonoBehaviour
         firstDownPos = pointerEventData.position;
         joystickBack.transform.position = firstDownPos;
         stick.transform.position = firstDownPos;
+        touchState = TouchState.DOWN;
 
     }
     public void PointerDrag(BaseEventData baseEventData)
@@ -51,6 +54,7 @@ public class JoyStickMove : MonoBehaviour
         {
             stick.transform.position = firstDownPos + dir * (backgroundRadius- stickRadius);
         }
+        touchState = TouchState.DRAG;
 
     }
     public void PointerUp(BaseEventData baseEventData)
@@ -60,5 +64,6 @@ public class JoyStickMove : MonoBehaviour
         joystickBack.transform.position = joystickPos;
         stick.transform.position = joystickPos;
         joyDir = Vector3.zero;
+        touchState = TouchState.UP;
     }
 }

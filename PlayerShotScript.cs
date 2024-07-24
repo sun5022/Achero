@@ -14,7 +14,10 @@ public class PlayerShotScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = Vector3.forward * speed;
+        //rb.velocity = Vector3.forward * speed;
+        rb.velocity = transform.forward * speed;
+        //rb.velocity = JoyStickMove.instance.joyDir * speed;
+
     }
 
     public void ObjTriggerEnter(GameObject obj)
@@ -22,7 +25,8 @@ public class PlayerShotScript : MonoBehaviour
         print("PlayerShot ObjTriggerEnter" + obj.tag);
         if (obj.tag == "Enemy")
         {
-            Destroy(obj);
+            //나중에 수정
+            //Destroy(obj);
         }
     }
 }

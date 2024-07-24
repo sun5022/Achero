@@ -29,8 +29,9 @@ public class PlayerController : MonoBehaviour
         if (JoyStickMove.instance.joyDir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(JoyStickMove.instance.joyDir, Vector3.up);
-            rb.velocity = JoyStickMove.instance.joyDir * speed;
+            
         }
+        rb.velocity = JoyStickMove.instance.joyDir * speed;
 
     }
     void AttackMove()
@@ -81,7 +82,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(playerState == PlayerState.ATTACK)
         {
-            AttackMove();
+            //AttackMove();
             print("AttackMove");
 
         }
