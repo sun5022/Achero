@@ -4,6 +4,7 @@ using UnityEngine;
 using Game;
 public class PlayerController : MonoBehaviour
 {
+    public List<GameObject> enemies;
     Rigidbody rb;
     public float speed = 5;
     public float attackSpeed = 2;
@@ -22,19 +23,23 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (JoyStickMove.instance.joyDir != Vector3.zero)
+        GameObject enemy = RaycastEnemy();
+        if(enemy != null)
         {
-            //transform.Translate(Vector3.forward * Time.deltaTime * speed);
-            transform.rotation = Quaternion.LookRotation(JoyStickMove.instance.joyDir, Vector3.up);
-            rb.velocity = JoyStickMove.instance.joyDir * speed;
+            transform.rotation
+                = Quaternion.LookRotation(enemy.transform.position - transform.position, Vector3.up);
         }
         else
         {
-            rb.velocity = Vector3.zero;
+            if (JoyStickMove.instance.joyDir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(JoyStickMove.instance.joyDir, Vector3.up);
+            }
         }
+        rb.velocity = JoyStickMove.instance.joyDir * speed;
 
-        
-        if(JoyStickMove.instance.touchState == TouchState.IDLE)
+
+        if (JoyStickMove.instance.touchState == TouchState.IDLE)
         {
             animator.SetBool("Run", false);
             animator.SetBool("Attack", false);
@@ -67,6 +72,24 @@ public class PlayerController : MonoBehaviour
         print("OnAttack");
         Instantiate(playerShot, spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
+
+    public GameObject RaycastEnemy()
+    {
+        RaycastHit hit;
+        LayerMask layermask = 1 << LayerMask.NameToLayer("Enemy");
+
+        for(int i =0; i<enemies.Count; i++)
+        {
+            bool isHit = Physics.Raycast(transform.position, 
+                enemies[i].transform.position - transform.position, out hit, 50, layermask);
+            if (isHit && hit.transform.tag == "Enemy")
+            {
+                //print("isHit " + hit.point);
+                return enemies[i];
+            }
+        }
+        return null;
+    }
     void OnDrawGizmos()
     {
         RaycastHit hit;
@@ -75,7 +98,6 @@ public class PlayerController : MonoBehaviour
         bool isHit = Physics.Raycast(transform.position, transform.forward, out hit, 50, layermask);
         if (isHit && hit.transform.tag == "Enemy")
         {
-            print("isHit " + hit.point);
             Gizmos.color = Color.green;
         }
         else
