@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public GameObject playerShot;
     public Transform spawnPoint;
     Animator animator;
+    PlayerState playerState = PlayerState.IDLE;
+    float recoverTime;
 
     void Start()
     {
@@ -20,46 +22,124 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("AttackSpeed", attackSpeed);
     }
 
+    void BasicMove()
+    {
+        animator.SetBool("Run", false);
+        animator.SetBool("Attack", false);
+        if (JoyStickMove.instance.joyDir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(JoyStickMove.instance.joyDir, Vector3.up);
+            rb.velocity = JoyStickMove.instance.joyDir * speed;
+        }
+
+    }
+    void AttackMove()
+    {
+        animator.SetBool("Run", false);
+        animator.SetBool("Attack", true);
+    }
+    void HitMove()
+    {
+        animator.SetBool("Run", false);
+        animator.SetBool("Attack", false);
+        animator.SetTrigger("HitTrigger");
+    }
+
+    void RunMove()
+    {
+        animator.SetBool("Run", true);
+        animator.SetBool("Attack", false);
+        if (JoyStickMove.instance.joyDir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(JoyStickMove.instance.joyDir, Vector3.up);
+            rb.velocity = JoyStickMove.instance.joyDir * speed;
+        }
+    }
+
+
 
     void Update()
     {
-        GameObject enemy = RaycastEnemy();
+
+        if(playerState == PlayerState.IDLE)
+        {
+            GameObject enemy = RaycastEnemy();
+            if (enemy == null)
+            {
+                BasicMove();
+            }
+            else
+            {
+                transform.rotation = Quaternion.LookRotation(
+                        enemy.transform.position - transform.position,
+                        Vector3.up);
+                AttackMove();
+                playerState = PlayerState.ATTACK;
+
+            }
+        }
+        else if(playerState == PlayerState.ATTACK)
+        {
+            AttackMove();
+            print("AttackMove");
+
+        }
+        else if (playerState == PlayerState.HIT)
+        {
+            if (recoverTime > 0)
+            {
+                recoverTime -= Time.deltaTime;
+                HitMove();
+                if(recoverTime <= 0)
+                {
+                    playerState = PlayerState.IDLE;
+                }
+            }
+            
+        }
+        else if (playerState == PlayerState.RUN)
+        {
+            RunMove();
+        }
+        
+        /*
         if(enemy != null)
         {
-            transform.rotation
+            if (JoyStickMove.instance.joyDir != Vector3.zero)
+            {
+                transform.rotation
                 = Quaternion.LookRotation(enemy.transform.position - transform.position, Vector3.up);
+            }
         }
         else
         {
             if (JoyStickMove.instance.joyDir != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(JoyStickMove.instance.joyDir, Vector3.up);
+                //transform.rotation = Quaternion.LookRotation(transform.forward, Vector3.up);
             }
         }
         rb.velocity = JoyStickMove.instance.joyDir * speed;
 
-
+        */
         if (JoyStickMove.instance.touchState == TouchState.IDLE)
         {
-            animator.SetBool("Run", false);
-            animator.SetBool("Attack", false);
+            playerState = PlayerState.IDLE;  
         }
         else if (JoyStickMove.instance.touchState == TouchState.DOWN)
         {
-            animator.SetBool("Run", false);
-            animator.SetBool("Attack", false);
+            playerState = PlayerState.IDLE;
         }
         else if (JoyStickMove.instance.touchState == TouchState.DRAG)
         {
-            animator.SetBool("Run", true);
-            animator.SetBool("Attack", false);
+            playerState = PlayerState.RUN;
         }
         else if (JoyStickMove.instance.touchState == TouchState.UP)
         {
-            animator.SetBool("Run", false);
-            animator.SetBool("Attack", true);
+            playerState = PlayerState.IDLE;
         }
-        
+        animator.SetFloat("AttackSpeed", attackSpeed);
+
     }
     //public void ObjTriggerEnter(Collider other)
     public void ObjTriggerEnter(GameObject other)
@@ -76,6 +156,37 @@ public class PlayerController : MonoBehaviour
     public GameObject RaycastEnemy()
     {
         RaycastHit hit;
+        LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemy");
+        float shortestDistance = Mathf.Infinity;
+        int shortestIndex = -1;
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            bool isHit = Physics.Raycast(transform.position,
+                 enemies[i].transform.position - transform.position,
+                 out hit, 50, layerMask);
+            if (isHit && hit.transform.tag == "Enemy")
+            {
+                float distance =
+                Vector3.Distance(transform.position, enemies[i].
+                                 transform.position);
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    shortestIndex = i;
+                }
+            }
+        }
+        if (shortestIndex == -1)
+        {
+            return null;
+        }
+        else
+        {
+            return enemies[shortestIndex];
+        }
+
+        /*
+        RaycastHit hit;
         LayerMask layermask = 1 << LayerMask.NameToLayer("Enemy");
 
         for(int i =0; i<enemies.Count; i++)
@@ -89,13 +200,17 @@ public class PlayerController : MonoBehaviour
             }
         }
         return null;
+        */
     }
     void OnDrawGizmos()
     {
         RaycastHit hit;
         LayerMask layermask = 1 << LayerMask.NameToLayer("Enemy");
         // LayerMask layermask = LayerMask.GetMask("Enemy");
-        bool isHit = Physics.Raycast(transform.position, transform.forward, out hit, 50, layermask);
+        print("transform.positionn " + transform.position);
+        print("enemies[0].transform.position "+ enemies[0].transform.position);
+        bool isHit = Physics.Raycast(transform.position, 
+            enemies[0].transform.position - transform.position, out hit, 50, layermask);
         if (isHit && hit.transform.tag == "Enemy")
         {
             Gizmos.color = Color.green;
@@ -104,7 +219,7 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = Color.red;
         }
-        Gizmos.DrawRay(transform.position, transform.forward * 50);
+        Gizmos.DrawRay(transform.position, enemies[0].transform.position - transform.position );
     }
 
 }
