@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetBool("Run", false);
         animator.SetBool("Attack", true);
+        rb.velocity = Vector3.zero;
     }
     void HitMove()
     {
