@@ -19,18 +19,8 @@ public class PlayerController : MonoBehaviour
 
     GameObject doubleSpawnObj1;
     GameObject doubleSpawnObj2;
-
-    void MakeDoubleSpawnPoint(){
-        doubleSpawnObj1 = new GameObject();
-        doubleSpawnObj1.transform.parent = transform;
-        doubleSpawnObj1.transform.localPosition = new Vector3(-0.2f,0.5f,0.94f);
-        doubleSpawnObj1.transform.rotation = Quaternion.identity;
-        doubleSpawnObj2 = new GameObject();
-        doubleSpawnObj2.transform.parent = transform;
-        doubleSpawnObj2.transform.localPosition = new Vector3(0.2f,0.5f,0.94f);
-        doubleSpawnObj2.transform.rotation = Quaternion.identity;
-    }
-    
+    bool doubleShot = false;
+   
 
     void Start()
     {
@@ -40,6 +30,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         animator.SetFloat("AttackSpeed", attackSpeed);
         MakeDoubleSpawnPoint();
+        doubleShot = GameManager.instance.player.GetSkill(SkillType.DOUBLE_SHOT).active;
+        
     }
 
     void BasicMove()
@@ -149,9 +141,10 @@ public class PlayerController : MonoBehaviour
         }
         //Destroy(other);
     }
-    bool doubleShot = true;
+
     public void OnAttack()
     {
+        doubleShot = GameManager.instance.player.GetSkill(SkillType.DOUBLE_SHOT).active;
         if(doubleShot){
             Instantiate(playerShot, doubleSpawnObj1.transform.position,
              spawnPoint.transform.rotation);
@@ -237,5 +230,16 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawRay(transform.position, enemies[0].transform.position - transform.position );
     }
     */
+     void MakeDoubleSpawnPoint(){
+        doubleSpawnObj1 = new GameObject();
+        doubleSpawnObj1.transform.parent = transform;
+        doubleSpawnObj1.transform.localPosition = new Vector3(-0.2f,0.5f,0.94f);
+        doubleSpawnObj1.transform.rotation = Quaternion.identity;
+        doubleSpawnObj2 = new GameObject();
+        doubleSpawnObj2.transform.parent = transform;
+        doubleSpawnObj2.transform.localPosition = new Vector3(0.2f,0.5f,0.94f);
+        doubleSpawnObj2.transform.rotation = Quaternion.identity;
+    }
+    
 
 }

@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public List<GameObject> enemies;
+    public Player player;
     // Start is called before the first frame update
     void MakeBottomObj()
     {
@@ -38,13 +39,13 @@ public class GameManager : MonoBehaviour
     {
         // Skill skill = new Skill(SkillType.DOUBLE_SHOT, false);
         // print(skill);
-        Player player = new Player(100, 2, 2);
+        player = new Player(100, 2, 2);
         
         Skill skill = player.GetSkill(SkillType.DOUBLE_SHOT);
-        print(skill);
+        //print(skill);
         player.SetSkill(SkillType.DOUBLE_SHOT, true);
-        skill = player.GetSkill(SkillType.DOUBLE_SHOT);
-        print(skill);
+        //skill = player.GetSkill(SkillType.DOUBLE_SHOT);
+        //print(skill);
 
         
 

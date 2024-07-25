@@ -7,18 +7,22 @@ namespace Game
 {
     public enum TouchState { IDLE, DOWN, DRAG, UP};
     public enum PlayerState { IDLE, ATTACK, HIT, RUN};
-    public enum SkillType {DOUBLE_SHOT, PIERCE_SHOT, REFLECT_SHOT};
+    public enum SkillType {DOUBLE_SHOT, PIERCE_SHOT, REFLECT_SHOT,  MAX_NUM};
 
     [System.Serializable]
     public struct Skill{
+        public static string[] skillNames = {"더블샷", "관통샷", "벽반사"};
         public SkillType type;
         public bool active;
+        public string skillName;
+        
         public Skill(SkillType type, bool active){
             this.type = type; this.active = active;
+            this.skillName = skillNames[(int)type];
         }
         public override string ToString()
         {
-            return "Skill=SkillType : " + type + " active : " + active;
+            return "Skill=SkillType : " + type + " SkillName : " + skillName +" active : " + active;
         }
 
     }
