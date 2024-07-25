@@ -92,14 +92,17 @@ public class PlayerController : MonoBehaviour
             RunMove();
         }
         
-        if (recoverTime > 0)
+        if (recoverTime >= 0)
         {
             recoverTime -= Time.deltaTime;
             HitMove();
+            rb.velocity = JoyStickMove.instance.joyDir * speed * 0.5f;
             if(recoverTime <= 0)
             {
                 playerState = PlayerState.IDLE;
             }
+        }else{
+            rb.velocity = JoyStickMove.instance.joyDir * speed;
         }
         
        
@@ -124,6 +127,7 @@ public class PlayerController : MonoBehaviour
     {
         print("ObjTriggerEnter" + other.gameObject.tag);
         if(other.tag == "Enemy"){
+            recoverTime = 3;
             animator.SetTrigger("HitTrigger");
         }
         //Destroy(other);
