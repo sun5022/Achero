@@ -5,6 +5,10 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     Camera cam;
+    public Transform playerTr;
+    Vector3 offset;
+    Vector3 pos1;
+    Vector3 pos2;
     void Start()
     {
         float width;
@@ -20,7 +24,39 @@ public class CameraScript : MonoBehaviour
         float targetSize = targetRatio * size / designRatio;
         //print(targetfov);
         cam.orthographicSize = targetSize;
-        
+
+
+        Vector3 p1 = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 p2 = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
+        print("p1" + p1);
+        print("p2" + p2);
+
+
+    Ray ray = Camera.main.ScreenPointToRay(new Vector3(0, 0, 0));
+    RaycastHit hit;
+    BoxCollider box= GameObject.Find("World").GetComponent<BoxCollider>();
+    print("box  " + box.name);
+    pos1 = Vector3.zero;
+    if(box.Raycast(ray, out hit, 1000))
+    {
+        pos1 = hit.point;
+    }
+    print("pos1" + pos1);
+
+
+    Ray ray2 = Camera.main.ScreenPointToRay(new Vector3(Screen.width, Screen.height, 0));
+    RaycastHit hit2;
+    BoxCollider box2 = GameObject.Find("World").GetComponent<BoxCollider>();
+    print("box  " + box2.name);
+    pos2 = Vector3.zero;
+    if (box2.Raycast(ray2, out hit2, 1000))
+    {
+        pos2 = hit2.point;
+    }
+    print("pos2" + pos2);
+
+
+        offset = transform.position - playerTr.position;
         /*
         float width;
         float height;
@@ -37,6 +73,25 @@ public class CameraScript : MonoBehaviour
         cam.fieldOfView = targetfov;
         */
 
+    }
+    Vector3 cameraPos = Vector3.zero;
+    void LateUpdate()
+    {
+        
+        //if(playerTr.position + oth < oth)
+        cameraPos.y = playerTr.position.y + offset.y;
+        if (playerTr.position.z < 0)
+        {
+        }
+        else if (playerTr.position.z + cam.orthographicSize * 2 > 30 + 1.5f)
+        {
+        }
+        else
+        {
+            cameraPos.z = playerTr.position.z + offset.z;
+            transform.position = cameraPos;
+        }
+        
     }
 
     // Update is called once per frame
