@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class SkillManager : MonoBehaviour
 {
+    public GameObject skillPanel;
     public Text[] texts;
     public Image[] images;
     public Sprite[] sprites;
@@ -35,6 +36,13 @@ public class SkillManager : MonoBehaviour
             texts[i].text = Skill.skillNames[skillArr[i]] ;
             images[i].sprite = sprites[skillArr[i]];
         }
+    }
+    public void SelectSkill(int i){
+        print("SelectSkill" + i);
+        GameManager.instance.player.SetSkill((SkillType)skillArr[i], true);
+        Skill skill = GameManager.instance.player.GetSkill((SkillType)skillArr[i]);
+        print(skill);
+        skillPanel.SetActive(false);
     }
 
 }
