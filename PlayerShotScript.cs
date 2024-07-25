@@ -25,8 +25,9 @@ public class PlayerShotScript : MonoBehaviour
         print("PlayerShot ObjTriggerEnter" + obj.tag);
         if (obj.tag == "Enemy")
         {
-            //나중에 수정
             //Destroy(obj);
+            GameManager.instance.
+            OnEnemyDisAppear(obj);
         }
     }
 }
