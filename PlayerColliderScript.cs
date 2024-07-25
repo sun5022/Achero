@@ -11,6 +11,7 @@ public class PlayerColliderScript : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
+        print("player OnTriggerEnter");
         if (playerController != null)
         {
             //print("OnTriggerEnter" + other.gameObject.tag);
