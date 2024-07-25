@@ -13,10 +13,30 @@ public class CameraScript : MonoBehaviour
     Vector3 pos1;
     Vector3 pos2;
 
-    
+    void func1(){
+        Vector3 a = new Vector3(-2, -2, 0);
+        Vector3 b = new Vector3(1, 0, 0);
+        Vector3 minus_a = -a;
+        float magnitude = Vector3.Dot(minus_a, b);
+        Vector3 c = -1 * 2 * magnitude * b;
+        Vector3 d = c + minus_a;
+        Vector3 e = -d;
+        print(e);
+    }
+    void func2(){
+        Vector3 a = new Vector3(-2, -2, 0);
+        Vector3 b = new Vector3(1, 0, 0);
+        Vector3 reflect = Vector3.Reflect(a, b);
+        print("reflect" + reflect); 
+
+    }
 
     void Start()
     {
+        //func1();
+        //func2();
+       
+
         CalcAspect();
         CalcLeftBottomCorner();
         CalcRigthTopCorner();

@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
         bottomObj.transform.position = new Vector3(0, 0, -Camera.main.orthographicSize - 1.5f);
         bottomObj.layer = LayerMask.NameToLayer("Wall");
         bottomObj.name = "BottomObj";
+        bottomObj.tag = "Wall";
         bottomObj.AddComponent<Collider>();
     }
     void MakeTopObj()
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         upper.transform.position = new Vector3(0, 0, 30 - Camera.main.orthographicSize - 1.5f + 2);
         upper.layer = LayerMask.NameToLayer("Wall");
         upper.name = "TopObj";
+        upper.tag = "Wall";
         upper.AddComponent<Collider>();
     }
     void Start()

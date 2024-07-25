@@ -6,6 +6,7 @@ public class PlayerShotScript : MonoBehaviour
 {
     Rigidbody rb;
     public float speed = 10;
+    int wallCount = 4;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -20,6 +21,22 @@ public class PlayerShotScript : MonoBehaviour
 
     }
 
+    
+    void OnCollisionEnter(Collision other) {
+        if(other.gameObject.tag == "Wall"){
+
+            if(wallCount > 0){
+                print("reflect");
+                wallCount--;
+                transform.forward = 
+                Vector3.Reflect(transform.forward, other.GetContact(0).normal);
+            }
+            else{
+                Destroy(gameObject);
+            }
+  }
+
+    }
     public void ObjTriggerEnter(GameObject obj)
     {
         print("PlayerShot ObjTriggerEnter" + obj.tag);

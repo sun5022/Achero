@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnAttack()
     {
-        print("OnAttack");
+        //print("OnAttack");
         Instantiate(playerShot, spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
 

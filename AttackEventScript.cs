@@ -11,7 +11,7 @@ public class AttackEventScript : MonoBehaviour
     }
     public void Attack()
     {
-        print("Attack");
+        //print("Attack");
         playerController.OnAttack();
     }
 }
