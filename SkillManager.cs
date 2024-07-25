@@ -32,6 +32,7 @@ public class SkillManager : MonoBehaviour
         }
         for(int i = 0; i<totalNum; i++){
             //print(skillArr[i]);
+            texts[i].text = Skill.skillNames[skillArr[i]] ;
             images[i].sprite = sprites[skillArr[i]];
         }
     }
