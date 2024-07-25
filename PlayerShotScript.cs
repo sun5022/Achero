@@ -26,14 +26,17 @@ public class PlayerShotScript : MonoBehaviour
 
     void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Wall"){
-            if(wallCount > 0){
-                wallCount--;
-                transform.forward = 
-                Vector3.Reflect(transform.forward, other.GetContact(0).normal);
-            }
-            else{
+            if(GameManager.instance.player.GetSkill(Game.SkillType.REFLECT_SHOT).active){
+                if(wallCount > 0){
+                    wallCount--;
+                    transform.forward = 
+                    Vector3.Reflect(transform.forward, other.GetContact(0).normal);
+                }
+            }else{
                 Destroy(gameObject);
             }
+        }else{
+            Destroy(gameObject);
         }
 
     }

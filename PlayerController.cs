@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("AttackSpeed", attackSpeed);
         MakeDoubleSpawnPoint();
         doubleShot = GameManager.instance.player.GetSkill(SkillType.DOUBLE_SHOT).active;
-        
+        playerState = PlayerState.FIRST_START;
     }
 
     void BasicMove()
@@ -73,8 +73,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
-        if(playerState == PlayerState.IDLE)
+        if(playerState == PlayerState.FIRST_START){
+            BasicMove();
+        }
+        else if(playerState == PlayerState.IDLE)
         {
             GameObject enemy = RaycastEnemy();
             if (enemy == null)

@@ -6,12 +6,13 @@ using UnityEngine;
 namespace Game
 {
     public enum TouchState { IDLE, DOWN, DRAG, UP};
-    public enum PlayerState { IDLE, ATTACK, HIT, RUN};
-    public enum SkillType {DOUBLE_SHOT, PIERCE_SHOT, REFLECT_SHOT,  MAX_NUM};
+    public enum PlayerState { FIRST_START, IDLE, ATTACK, HIT, RUN};
+    public enum SkillType {DOUBLE_SHOT, PIERCE_SHOT, REFLECT_SHOT,BACK_ATTACK,  MAX_NUM};
 
     [System.Serializable]
     public struct Skill{
-        public static string[] skillNames = {"더블샷", "관통샷", "벽반사"};
+        public static string[] skillNames = {"더블샷", "관통샷", 
+        "벽반사","후방공격"};
         public SkillType type;
         public bool active;
         public string skillName;
@@ -39,6 +40,7 @@ namespace Game
             skills.Add(new Skill(SkillType.DOUBLE_SHOT, false));
             skills.Add(new Skill(SkillType.PIERCE_SHOT, false));
             skills.Add(new Skill(SkillType.REFLECT_SHOT, false));
+            skills.Add(new Skill(SkillType.BACK_ATTACK, false));
             // for(int i = 0; i<skills.Count; i++){
             //     Debug.Log(skills[i]);
             // }

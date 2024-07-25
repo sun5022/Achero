@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class SkillManager : MonoBehaviour
 {
-    public GameObject skillPanel;
+    
     public Text[] texts;
     public Image[] images;
     public Sprite[] sprites;
@@ -31,7 +31,7 @@ public class SkillManager : MonoBehaviour
             skillArr[a] = skillArr[b];
             skillArr[b] = temp;
         }
-        for(int i = 0; i<totalNum; i++){
+        for(int i = 0; i<3; i++){
             //print(skillArr[i]);
             texts[i].text = Skill.skillNames[skillArr[i]] ;
             images[i].sprite = sprites[skillArr[i]];
@@ -42,7 +42,7 @@ public class SkillManager : MonoBehaviour
         GameManager.instance.player.SetSkill((SkillType)skillArr[i], true);
         Skill skill = GameManager.instance.player.GetSkill((SkillType)skillArr[i]);
         print(skill);
-        skillPanel.SetActive(false);
+        GameManager.instance.GameStart();
     }
 
 }
