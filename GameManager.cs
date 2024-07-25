@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -35,6 +36,18 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        // Skill skill = new Skill(SkillType.DOUBLE_SHOT, false);
+        // print(skill);
+        Player player = new Player(100, 2, 2);
+        
+        Skill skill = player.GetSkill(SkillType.DOUBLE_SHOT);
+        print(skill);
+        player.SetSkill(SkillType.DOUBLE_SHOT, true);
+        skill = player.GetSkill(SkillType.DOUBLE_SHOT);
+        print(skill);
+
+        
+
         instance = this;
         enemies = new List<GameObject>();
         MakeBottomObj();

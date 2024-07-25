@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class PlayerShotScript : MonoBehaviour
 {
+
     Rigidbody rb;
     public float speed = 10;
     int wallCount = 4;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        
     }
 
     // Update is called once per frame
@@ -21,12 +24,9 @@ public class PlayerShotScript : MonoBehaviour
 
     }
 
-    
     void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Wall"){
-
             if(wallCount > 0){
-                print("reflect");
                 wallCount--;
                 transform.forward = 
                 Vector3.Reflect(transform.forward, other.GetContact(0).normal);
@@ -34,7 +34,7 @@ public class PlayerShotScript : MonoBehaviour
             else{
                 Destroy(gameObject);
             }
-  }
+        }
 
     }
     public void ObjTriggerEnter(GameObject obj)
